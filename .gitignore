@@ -1,1 +1,4 @@
 /tasks-app/tasks.txt
+/.venv/
+.idea
+*/__pycache__/*
