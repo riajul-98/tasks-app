@@ -3,11 +3,17 @@ import FreeSimpleGUI as sg
 
 label = sg.Text("Type in a task")
 input_box = sg.InputText(tooltip="Enter task", key="task")
+
 add_botton = sg.Button("Add")
 list_box = sg.Listbox(values=functions.get_tasks(), key="tasks", enable_events=True, size=[45, 10])
-edit_button = sg.Button("Edit")
 
-window = sg.Window("My Tasks App", layout=[[label, input_box, add_botton], [list_box, edit_button]], font=("Helvetica", 15))
+edit_button = sg.Button("Edit")
+complete_button = sg.Button("Complete")
+
+exit_button = sg.Button("Exit")
+
+window = sg.Window("My Tasks App", layout=[[label, input_box, add_botton],
+                                           [list_box, edit_button, complete_button], [exit_button]], font=("Helvetica", 15))
 
 while True:
     event, values = window.read()
@@ -33,7 +39,17 @@ while True:
             window["tasks"].update(values=tasks)
         case "tasks":
             window["task"].update(value=values["tasks"][0])
+        case "Complete":
+            task_to_complete = values["tasks"][0]
+            tasks = functions.get_tasks()
+            tasks.remove(task_to_complete)
+            functions.write_tasks(tasks)
 
+            window["tasks"].update(values=tasks)
+            window["task"].update(value="")
+
+        case "Exit":
+            break
         case sg.WIN_CLOSED:
             break
 
